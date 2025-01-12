@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking History Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .no-data {
+            text-align: center;
+            font-weight: bold;
+            color: #555;
+        }
+        .total-price {
+            font-weight: bold;
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function computeTotalPrice() {
+            const rows = document.querySelectorAll("tbody tr");
+            let totalPrice = 0;
+
+            rows.forEach(row => {
+                const priceCell = row.querySelector("td:last-child");
+                if (priceCell && !isNaN(parseFloat(priceCell.textContent))) {
+                    totalPrice += parseFloat(priceCell.textContent);
+                }
+            });
+
+            document.getElementById("totalPrice").textContent = `Total Price: $${totalPrice.toFixed(2)}`;
+        }
+
+        // Call computeTotalPrice when the page loads
+        window.onload = computeTotalPrice;
+    </script>
+</head>
+<body>
+    <h2>Booking History Report</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Tickets/Types</th>
+                <th>Number of Rides</th>
+                <th>Date Reservation</th>
+                <th>Receipt of Payment</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ticket in report_data %}
+            <tr>
+                <td>{{ ticket.Name }}</td>
+                <td>{{ ticket.Email }}</td>
+                <td>{{ ticket.Tickets_Types }}</td>
+                <td>{{ ticket.Number_of_Rides }}</td>
+                <td>{{ ticket.Date_Reservation }}</td>
+                <td>{{ ticket.Receipt_of_Payment }}</td>
+                <td>{{ ticket.Total_Price }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="no-data">No booking records found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="totalPrice" class="total-price"></div>
+</body>
+</html>

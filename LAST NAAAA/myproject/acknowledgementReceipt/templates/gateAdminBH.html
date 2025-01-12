@@ -1,0 +1,216 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking History</title>
+    <link rel="stylesheet" href="{% static 'css/adminBH.css' %}">
+    <script>
+        // Function to send email based on status
+        function sendEmail(status, reason = '') {
+            const selectedTickets = Array.from(document.querySelectorAll('input[name="ticket"]:checked')).map(
+                checkbox => checkbox.value
+            );
+
+            if (selectedTickets.length === 0) {
+                alert("Please select at least one ticket.");
+                return;
+            }
+
+            const ticketId = selectedTickets[0]; // Assuming only one ticket is selected at a time.
+
+            // Get customer email and name from the selected ticket row
+            const row = document.querySelector(`input[value="${ticketId}"]`).closest('tr');
+            const email = row.querySelector('td:nth-child(9)').textContent.trim();
+            const customerName = row.querySelector('td:nth-child(2)').textContent.trim();
+
+            // Prepare email content based on status
+            let subject = '';
+            let body = '';
+
+            if (status === 'DECLINED') {
+                subject = `Booking Declined: ${customerName}`;
+                body = `Dear ${customerName},\n\nYour booking has been declined. Reason: ${reason}\n\nBest regards,\nYour Company`;
+            } else if (status === 'PAID') {
+                subject = `Booking Paid: ${customerName}`;
+                body = `Dear ${customerName},\n\nYour booking has been successfully paid.\n\nPlease find your booking details and receipt below.\n\nBooking ID: ${ticketId}\n\nBest regards,\nYour Company`;
+            }
+
+            // Send email request to the server
+            fetch('/send_email/', {  // URL should be handled by your Django backend for sending email
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    subject: subject,
+                    body: body,
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Email sent successfully.');
+                } else {
+                    alert('Failed to send email.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+
+        // Function to show pop-up for declining booking
+        function declineBooking() {
+            const reason = prompt("Please enter the reason for declining this booking:");
+
+            if (reason) {
+                sendEmail('DECLINED', reason);  // Send the email with the reason
+            }
+        }
+
+        // Function to mark booking as paid and send email
+        function markPaidBooking() {
+            sendEmail('PAID');  // Send the email confirming payment
+        }
+
+        // Function to update ticket status
+        function updateTicketStatus(status) {
+            const selectedTickets = Array.from(document.querySelectorAll('input[name="ticket"]:checked')).map(
+                checkbox => checkbox.value
+            );
+
+            if (selectedTickets.length === 0) {
+                alert("Please select at least one ticket to update.");
+                return;
+            }
+
+            const confirmation = confirm(`Are you sure you want to mark the selected tickets as ${status}?`);
+            if (!confirmation) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            formData.append('status', status);
+            selectedTickets.forEach(ticketId => formData.append('ticket', ticketId));
+
+            fetch('{% url "eaadmin_history" %}', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    selectedTickets.forEach(id => {
+                        const row = document.querySelector(`input[value="${id}"]`).closest('tr');
+                        const statusCell = row.querySelector('td:last-child');
+                        statusCell.textContent = status;
+
+                        if (status === 'PAID') {
+                            markPaidBooking();  // Trigger the paid email
+                        } else if (status === 'DECLINED') {
+                            declineBooking();  // Trigger the decline email with reason
+                        }
+                    });
+                } else {
+                    alert("Failed to update ticket status. Please try again.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred. Please try again.");
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <img src="{% static 'media/logo.png' %}" alt="Logo">
+        <nav>
+            <a href="/gateadmin/history/">Booking History</a>
+            <a href="/gateadmin/buyticket/">Buy Ticket</a>
+            <a href="/gateadmin/account/">My Account</a>
+        </nav>
+    </header>
+
+    {% block content %}
+    <div>
+        <h2 align="center">Booking History</h2>
+
+        <form id="ticketForm" method="POST" action="{% url 'eaadmin_history' %}">
+            {% csrf_token %}
+
+            <div class="search-filters">
+                <input type="text" id="searchBox" placeholder="Search..." onkeyup="searchTable()">
+                <button type="button" onclick="filterTable('all')">ALL BOOKINGS</button>
+                <button type="button" onclick="filterTable('pending')">PENDING</button>
+                <button type="button" onclick="filterTable('paid')">SUCCESSFUL</button>
+                <select onchange="sortTable(this.value)">
+                    <option value="">Sort By</option>
+                    <option value="name">Sort By Name</option>
+                    <option value="date">Sort By Date</option>
+                    <option value="status">Sort By Status</option>
+                </select>
+            </div>
+
+            <table class="booking-history">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Name</th>
+                        <th>Ticket Type/s</th>
+                        <th>Number of Unlimited Rides</th>
+                        <th>Number of Limited Rides</th>
+                        <th>Date Reservation</th>
+                        <th>Date Availed</th>
+                        <th>Gcash Reference Number</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in ticket_reservations %}
+                    <tr>
+                        <td><input type="checkbox" name="ticket" value="{{ ticket.id }}"></td>
+                        <td>{{ ticket.customer_name }}</td>
+                        <td>
+                            {% if ticket.unlimited_quantity > 0 %}Unlimited{% endif %}
+                            {% if ticket.limited_quantity > 0 %}{% if ticket.unlimited_quantity > 0 %}, {% endif %}Limited{% endif %}
+                        </td>
+                        <td>{{ ticket.unlimited_quantity }}</td>
+                        <td>{{ ticket.number_of_rides }}</td>
+                        <td>{{ ticket.date_of_purchase|date:"Y-m-d " }}</td>
+                        <td>{{ ticket.ticket_date_availed|default:"Not Availed"|date:"Y-m-d " }}</td>
+                        <td>{{ ticket.receipt_of_payment }}</td>
+                        <td>{{ ticket.customer_email }}</td>
+                        <td>{{ ticket.status|default:"Pending" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="9" align="center">No booking records found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div align="center" class="action-buttons">
+                <button class="paid" type="button" onclick="updateTicketStatus('PAID')">PAID</button>
+                <button class="decline" type="button" onclick="updateTicketStatus('DECLINED')">DECLINE</button>
+                <button class="remove" type="button" onclick="removeTickets()">REMOVE</button>
+                <button class="report-btn" type="button" onclick="generateReport()">Generate Report</button>
+            </div>
+        </form>
+    </div>
+    {% endblock %}
+
+    <footer>
+        <p>&copy; 2024 Your Company. All rights reserved.</p>
+    </footer>
+</body>
+</html>

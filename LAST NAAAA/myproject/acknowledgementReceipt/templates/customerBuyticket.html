@@ -1,0 +1,159 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Ticket</title>
+    <link rel="stylesheet" href="{% static 'css/custbuy.css' %}">
+    <style>
+        .customer-note {
+            font-size: 1em;
+            color: #333;
+            background-color: #fffae6;
+            border: 1px solid #ffc107;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            document.getElementById('ticket-date').setAttribute('min', `${year}-${month}-${day}`);
+        });
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.style.display = (section.style.display === "none" || section.style.display === "") ? "block" : "none";
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            const prices = {
+                'unlimited-pass': 1000,
+                'junior-pass': 700,
+                'pwd-senior-pass': 700,
+                'rides-attractions': 100,
+            };
+
+            for (const [key, price] of Object.entries(prices)) {
+                const quantity = parseInt(document.querySelector(`input[name="${key}-quantity"]`).value) || 0;
+                total += price * quantity;
+            }
+
+            document.getElementById('customer-grand-total').innerText = '₱' + total.toFixed(2);
+        }
+
+        function validateAndSubmit() {
+            const requiredFields = ['customer-name', 'customer-email', 'ticket-date'];
+            for (const field of requiredFields) {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    alert(`Please fill out the ${field.replace('-', ' ')} field.`);
+                    element.focus();
+                    return;
+                }
+            }
+
+            const quantities = [
+                'unlimited-pass-quantity',
+                'junior-pass-quantity',
+                'pwd-senior-pass-quantity',
+                'rides-attractions-quantity',
+            ].map(id => parseInt(document.querySelector(`input[name="${id}"]`).value) || 0);
+
+            if (quantities.every(qty => qty === 0)) {
+                alert("Please select at least one ticket.");
+                return;
+            }
+
+            document.getElementById('customer-ticket-form').submit();
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <img src="{% static 'media/logo.png' %}" alt="Logo">
+        <nav>
+            <a href="/costumer_main/">Home</a>
+            <a href="/cost_Rides/">Rides and Attractions</a>
+            <a href="{% url 'buy_ticket' %}">Buy Ticket</a>
+            <a href="/cost_account/">My Account</a>
+        </nav>
+    </header>
+
+    <form id="customer-ticket-form" action="{% url 'buy_ticket' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <label for="customer-name" class="customer-label">Customer Name:</label>
+            <input type="text" id="customer-name" name="customer_name" class="customer-input" required>
+        </div>
+        <div>
+            <label for="customer-email" class="customer-label">Email (Strictly use your registered Email Account in Etivac Thrillz): </label>
+            <input type="email" id="customer-email" name="customer_email" class="customer-input" required>
+        </div>
+        <div>
+            <label for="ticket-date" class="customer-label">Choose Date:</label>
+            <input type="date" id="ticket-date" name="ticket-date" class="customer-input" required>
+        </div>
+        <div>
+            <button type="button" onclick="toggleSection('customer-day-pass-section')" class="customer-button">Unlimited Pass</button>
+            <div id="customer-day-pass-section" style="display:none;">
+                <h2 class="customer-section-title">Unlimited Pass</h2>
+                <table class="customer-table">
+                    <tr>
+                        <th>Ticket Type</th>
+                        <th>Price</th>
+                        <th>Select Quantity</th>
+                    </tr>
+                    <tr>
+                        <td>Unlimited Day Pass</td>
+                        <td>₱1000.00</td>
+                        <td><input type="number" min="0" name="unlimited-pass-quantity" class="customer-input" value="0" onchange="calculateTotal()"></td>
+                    </tr>
+                    <tr>
+                        <td>Junior Day Pass</td>
+                        <td>₱700.00</td>
+                        <td><input type="number" min="0" name="junior-pass-quantity" class="customer-input" value="0" onchange="calculateTotal()"></td>
+                    </tr>
+                    <tr>
+                        <td>PWD & Senior Day Pass</td>
+                        <td>₱700.00</td>
+                        <td><input type="number" min="0" name="pwd-senior-pass-quantity" class="customer-input" value="0" onchange="calculateTotal()"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div>
+            <button type="button" onclick="toggleSection('customer-limited-pass-section')" class="customer-button">Limited Pass</button>
+            <div id="customer-limited-pass-section" style="display:none;">
+                <h2 class="customer-section-title">Limited Pass</h2>
+                <table class="customer-table">
+                    <tr>
+                        <th>Ticket Type</th>
+                        <th>Price</th>
+                        <th>Select Quantity</th>
+                    </tr>
+                    <tr>
+                        <td>Single Ride or Attraction Ticket</td>
+                        <td>₱100.00</td>
+                        <td><input type="number" min="0" name="rides-attractions-quantity" class="customer-input" value="0" onchange="calculateTotal()"></td>
+                    </tr>
+                </table>
+                <p class="customer-note">Note: Single Ride or Attraction Ticket can only be used once for 1 ride or attraction.</p>
+            </div>
+        </div>
+
+        <h3>Total: <span id="customer-grand-total">₱0.00</span></h3>
+        <button type="button" onclick="validateAndSubmit()" class="customer-button">Purchase Tickets</button>
+    </form>
+</body>
+</html>
+{% endblock %}

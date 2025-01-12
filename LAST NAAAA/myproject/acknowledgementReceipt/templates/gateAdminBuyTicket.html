@@ -1,0 +1,191 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketing Page</title>
+    <link rel="stylesheet" href="{% static 'css/gateadminbuy.css' %}">
+    <style>
+        .customer-note {
+            font-size: 1em;
+            color: #333;
+            background-color: #fffae6;
+            border: 1px solid #ffc107;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const minDate = `${year}-${month}-${day}`;
+
+            // Apply 'min' attribute to the single date input
+            document.getElementById('ticket-date').setAttribute('min', minDate);
+
+            // Pre-fill the default date with today's date
+            document.getElementById('ticket-date').value = minDate;
+        });
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.style.display = (section.style.display === "none" || section.style.display === "") ? "block" : "none";
+        }
+
+        function calculateTotal() {
+            let total = 0;
+
+            const dayPassPrices = {
+                'unlimited-pass': 1000,
+                'junior-pass': 700,
+                'pwd-senior-pass': 700
+            };
+
+            const limitedPassPrices = {
+                'rides-attractions': 100
+            };
+
+            for (const [key, price] of Object.entries(dayPassPrices)) {
+                const quantity = parseInt(document.querySelector(`input[name="${key}-quantity"]`).value) || 0;
+                total += price * quantity;
+            }
+
+            for (const [key, price] of Object.entries(limitedPassPrices)) {
+                const quantity = parseInt(document.querySelector(`input[name="${key}-quantity"]`).value) || 0;
+                total += price * quantity;
+            }
+
+            document.getElementById('customer-grand-total').innerText = '₱' + total.toFixed(2);
+        }
+
+        function validateAndSubmit() {
+            const requiredFields = [
+                document.getElementById('customer-name'),
+                document.getElementById('customer-email'),
+                document.getElementById('ticket-date')
+            ];
+
+            for (const field of requiredFields) {
+                if (!field.value.trim()) {
+                    alert(`Please fill out the required field: ${field.previousElementSibling.innerText}`);
+                    field.focus();
+                    return;
+                }
+            }
+
+            const unlimitedPassQuantities = [
+                parseInt(document.querySelector(`input[name="unlimited-pass-quantity"]`).value) || 0,
+                parseInt(document.querySelector(`input[name="junior-pass-quantity"]`).value) || 0,
+                parseInt(document.querySelector(`input[name="pwd-senior-pass-quantity"]`).value) || 0
+            ];
+
+            const limitedPassQuantities = [
+                parseInt(document.querySelector(`input[name="rides-attractions-quantity"]`).value) || 0
+            ];
+
+            const hasUnlimitedPass = unlimitedPassQuantities.some(qty => qty > 0);
+            const hasLimitedPass = limitedPassQuantities.some(qty => qty > 0);
+
+            if (!hasUnlimitedPass && !hasLimitedPass) {
+                alert("Please select at least one pass type: Unlimited Pass or Limited Pass.");
+                return;
+            }
+
+            // Set the selected ticket date in a hidden field before submission
+            const ticketDateField = document.getElementById('ticket-date').value.trim();
+            if (ticketDateField) {
+                document.getElementById('ticket-date-hidden').value = ticketDateField;
+            }
+
+            document.getElementById('customer-ticket-form').submit();
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <img src="{% static 'media/logo.png' %}" alt="Logo">
+        <nav>
+            <a href="/gateadmin/history/">Booking History</a>
+            <a href="/gateadmin/buyticket/">Buy Ticket</a>
+            <a href="/gateadmin/account/">My Account</a>
+        </nav>
+    </header>
+
+    <form id="customer-ticket-form" action="{% url 'gateadminticket' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <label for="customer-name" class="customer-label">Customer Name:</label>
+            <input type="text" id="customer-name" name="customer_name" class="customer-input" required>
+        </div>
+        <div>
+            <label for="customer-email" class="customer-label">Email:</label>
+            <input type="email" id="customer-email" name="customer_email" class="customer-input" required>
+        </div>
+        <div>
+            <label for="ticket-date" class="customer-label">Choose Date:</label>
+            <input type="date" id="ticket-date" name="ticket-date" class="customer-input" required>
+            <input type="hidden" id="ticket-date-hidden" name="ticket_date_availed">
+        </div>
+        <div>
+            <button type="button" onclick="toggleSection('customer-day-pass-section')" class="customer-button">Unlimited Pass</button>
+            <div id="customer-day-pass-section">
+                <h2 class="customer-section-title">Unlimited Pass</h2>
+                <table class="customer-table">
+                    <tr>
+                        <th>Ticket Type</th>
+                        <th>Price</th>
+                        <th>Select Quantity</th>
+                    </tr>
+                    <tr>
+                        <td>Unlimited Day Pass</td>
+                        <td>₱1000.00</td>
+                        <td><input type="number" min="0" name="unlimited-pass-quantity" class="customer-input" value="0" onchange="calculateTotal()"></td>
+                    </tr>
+                    <tr>
+                        <td>Junior Day Pass</td>
+                        <td>₱700.00</td>
+                        <td><input type="number" min="0" name="junior-pass-quantity" class="customer-input" value="0" onchange="calculateTotal()"></td>
+                    </tr>
+                    <tr>
+                        <td>PWD & Senior Day Pass</td>
+                        <td>₱700.00</td>
+                        <td><input type="number" min="0" name="pwd-senior-pass-quantity" class="customer-input" value="0" onchange="calculateTotal()"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div>
+            <button type="button" onclick="toggleSection('customer-limited-pass-section')" class="customer-button">Limited Pass</button>
+            <div id="customer-limited-pass-section">
+                <h2 class="customer-section-title">Limited Pass</h2>
+                <table class="customer-table">
+                    <tr>
+                        <th>Ticket Type</th>
+                        <th>Price</th>
+                        <th>Select Quantity</th>
+                    </tr>
+                    <tr>
+                        <td>Single Ride or Attraction Ticket</td>
+                        <td>₱100.00</td>
+                        <td><input type="number" min="0" name="rides-attractions-quantity" class="customer-input" value="0" onchange="calculateTotal()"></td>
+                    </tr>
+                </table>
+                <p class="customer-note">Note: Single Ride or Attraction Ticket can only be used once for 1 ride or attraction.</p>
+            </div>
+        </div>
+
+        <h3>Total: <span id="customer-grand-total">₱0.00</span></h3>
+        <button type="button" onclick="validateAndSubmit()" class="customer-button">Purchase Tickets</button>
+    </form>
+</body>
+</html>
+{% endblock %}

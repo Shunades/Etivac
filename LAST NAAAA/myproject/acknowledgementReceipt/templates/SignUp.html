@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sign Up</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+  <style>
+    /* Error message styling */
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: block;
+    }
+
+    .server-error {
+      color: red;
+      font-size: 1rem;
+      margin-bottom: 15px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-group input:invalid {
+      border-color: red;
+    }
+
+    .input-group input:valid {
+      border-color: green;
+    }
+
+    /* Floating label adjustment */
+    .floating-label {
+      color: #666;
+      font-size: 1rem;
+      pointer-events: none;
+      transition: 0.2s;
+    }
+
+    .input-group input:focus + .floating-label,
+    .input-group input:not(:placeholder-shown) + .floating-label {
+      font-size: 0.85rem;
+      color: #000;
+    }
+
+    /* Note styling */
+    .note {
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 5px;
+    }
+  </style>
+  <script>
+    // Prevent spaces in password field during input
+    function preventSpacesInPassword() {
+      const passwordField = document.getElementById("password");
+
+      passwordField.addEventListener("input", () => {
+        passwordField.value = passwordField.value.replace(/\s/g, "");
+        document.getElementById("password-error").textContent = passwordField.value.includes(" ")
+          ? "Spaces are not allowed in the password."
+          : "";
+      });
+    }
+
+    // Form validation
+    function validateSignUpForm(event) {
+      event.preventDefault();
+
+      // Clear previous error messages
+      const clearErrors = () => {
+        document.getElementById("username-error").textContent = "";
+        document.getElementById("email-error").textContent = "";
+        document.getElementById("password-error").textContent = "";
+        document.getElementById("confirm-password-error").textContent = "";
+      };
+
+      clearErrors();
+
+      // Get form values
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+      let isValid = true;
+
+      // Regular expressions
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+
+      // Username validation
+      if (username.length < 3 || username.length > 20 || /[^a-zA-Z0-9]/.test(username)) {
+        document.getElementById("username-error").textContent = "Username must be 3–20 characters and contain only letters and numbers.";
+        isValid = false;
+      }
+
+      // Email validation
+      if (!emailRegex.test(email)) {
+        document.getElementById("email-error").textContent = "Please enter a valid email address.";
+        isValid = false;
+      }
+
+      // Password validation
+      if (!passwordRegex.test(password)) {
+        document.getElementById("password-error").textContent = 
+          "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.";
+        isValid = false;
+      }
+
+      // Confirm no spaces in password
+      if (password.includes(" ")) {
+        document.getElementById("password-error").textContent = "Spaces are not allowed in the password.";
+        isValid = false;
+      }
+
+      // Confirm password validation
+      if (password !== confirmPassword) {
+        document.getElementById("confirm-password-error").textContent = "Passwords do not match.";
+        isValid = false;
+      }
+
+      // Submit if valid
+      if (isValid) {
+        document.getElementById("signup-form").submit();
+      }
+    }
+
+    // Initialize space prevention on page load
+    document.addEventListener("DOMContentLoaded", preventSpacesInPassword);
+  </script>
+</head>
+<body>
+  <div class="form-container">
+    <!-- Server-side error message -->
+    {% if messages %}
+      {% for message in messages %}
+        <div class="server-error">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+    
+    <h1 class="form-title">Create an Account</h1>
+    <p class="subtitle">Please fill out the form to sign up.</p>
+    
+    <form id="signup-form" method="post" action="{% url 'signup' %}" onsubmit="validateSignUpForm(event)">
+      {% csrf_token %}
+      
+      <!-- Username -->
+      <div class="input-group">
+        <input type="text" id="username" name="username" placeholder=" " required />
+        <label for="username" class="floating-label">Username</label>
+        <span id="username-error" class="error-message" aria-live="polite"></span>
+      </div>
+
+      <!-- Email -->
+      <div class="input-group">
+        <input type="email" id="email" name="email" placeholder=" " required />
+        <label for="email" class="floating-label">Email</label>
+        <span id="email-error" class="error-message" aria-live="polite"></span>
+      </div>
+
+      <!-- Password -->
+      <div class="input-group">
+        <input type="password" id="password" name="password" placeholder=" " required />
+        <label for="password" class="floating-label">Create Password</label>
+        <span id="password-error" class="error-message" aria-live="polite"></span>
+        <p class="note">* Note: Password must not contain spaces.</p>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="input-group">
+        <input type="password" id="confirm-password" name="confirm-password" placeholder=" " required />
+        <label for="confirm-password" class="floating-label">Confirm Password</label>
+        <span id="confirm-password-error" class="error-message" aria-live="polite"></span>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="button-container">
+        <button type="submit" class="signup-button">Sign Up</button>
+      </div>
+    </form>
+
+    <p class="login-link">Already have an account? <a href="{% url 'signin' %}">Login here</a></p>
+  </div>
+</body>
+</html>

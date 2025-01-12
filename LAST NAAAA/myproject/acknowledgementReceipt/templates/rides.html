@@ -1,0 +1,131 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Rides and Attractions{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/rides.css' %}">
+    <script>
+        // Function to open the modal
+        function openModal(card) {
+            var modal = document.getElementById("myModal");
+
+            // Ensure modal is visible
+            modal.style.display = "flex";
+
+            // Get the content from the clicked card
+            var cardName = card.querySelector(".ride-name").innerText;
+            var cardDescription = card.querySelector(".ride-description").innerText;
+            var cardInformation = card.querySelector(".ride-information").innerText;
+            var cardImage = card.querySelector(".ride-image").src;
+            var cardCategory = card.getAttribute("data-category");
+
+            // Set the modal content
+            document.getElementById("modalTitle").innerText = cardName;
+            document.getElementById("modalDescription").innerText = cardDescription;
+            document.getElementById("modalInformation").innerText = cardInformation;
+            document.getElementById("modalImage").src = cardImage;
+            document.getElementById("modalCategory").innerText = "Category: " + cardCategory;
+
+            // Disable body scroll when modal is open
+            document.body.classList.add('modal-open');
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none"; // Hide the modal
+            document.body.classList.remove('modal-open'); // Enable page scroll when modal is closed
+        }
+
+        // Close the modal if the user clicks anywhere outside of the modal
+        window.onclick = function(event) {
+            var modal = document.getElementById("myModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Function to filter the rides based on the selected category
+        function filterRides() {
+            var filterValue = document.getElementById("sort-rides").value;
+            var rideCards = document.querySelectorAll(".ride-card");
+
+            rideCards.forEach(function(card) {
+                var rideCategory = card.getAttribute("data-category");
+                
+                if (filterValue === "all" || rideCategory === filterValue) {
+                    card.style.display = "block"; // Show the card
+                } else {
+                    card.style.display = "none"; // Hide the card
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+<!-- Header Section -->
+<header>
+    <img src="{% static 'media/logo.png' %}" alt="Etivac Thrillz Logo">
+    <nav>
+        <a href="/">Home</a>
+        <a href="{% url 'ridesAttraction' %}">Rides and Attractions</a>
+        <a href="/signin/" class="sign-in-button">Sign In</a>
+    </nav>
+</header>
+
+{% block content %}
+    <div align="center">
+        <h2>Rides and Attractions</h2>
+
+        <!-- Sort Options -->
+        <section class="sort-by-container">
+            <label for="sort-rides">Sort By:</label>
+            <select id="sort-rides" onchange="filterRides()">
+                <option value="all">All Rides</option>
+                <option value="attractions">Attractions</option>
+                <option value="kiddie">Kiddie Rides</option>
+                <option value="family">Family Rides</option>
+                <option value="extreme">Extreme Rides</option>
+            </select>
+        </section>
+
+        <!-- Ride Grid -->
+        <section class="rides-gallery">
+            {% for ride in rides %}
+            <div class="ride-card" data-category="{{ ride.category }}" onclick="openModal(this)">
+                <img class="ride-image" src="{{ ride.image.url }}" alt="{{ ride.name }}">
+                <h3 class="ride-name">{{ ride.name }}</h3>
+                <p class="ride-description"><strong>Title:</strong> {{ ride.description }}</p>
+                <p class="ride-category"><strong>Category:</strong> {{ ride.category }}</p>
+                <p class="ride-information"><strong>Information:</strong> {{ ride.information }}</p>
+            </div>
+            {% empty %}
+            <p class="no-rides-message">No rides available at the moment.</p>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}
+
+<!-- The Modal (Hidden by default) -->
+<div id="myModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <img id="modalImage" src="" alt="Ride Image" style="width: 100%; max-height: 300px; object-fit: cover; margin-bottom: 20px;">
+        <p id="modalCategory"></p>
+        <p id="modalDescription"></p>
+        <p id="modalInformation"></p>
+    </div>
+</div>
+
+<!-- Footer Section -->
+<footer>
+    <p>&copy; 2024 Thrillz Theme Park. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>

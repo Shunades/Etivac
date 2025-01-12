@@ -1,0 +1,308 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    box-sizing: border-box; /* Ensure padding and borders don't affect width */
+}
+
+/* Universal Box Sizing */
+* {
+    box-sizing: border-box;
+}
+
+/* Header Styling */
+header {
+    position: relative;
+    z-index: 2;
+    background-color: #333;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header img {
+    width: 150px;
+    height: auto;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+nav a {
+    text-decoration: none;
+    background-color: #696969;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 15px;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+/* Main Container */
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.container h2 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Search and Filter Section */
+.search-filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.search-filters input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px;
+    font-size: 14px;
+}
+
+.search-filters button,
+.search-filters select {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background-color: #f8f8f8;
+    transition: background-color 0.3s;
+}
+
+.search-filters button:hover,
+.search-filters select:hover {
+    background-color: #e0e0e0;
+}
+
+/* Booking History Table */
+.booking-history {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.booking-history th,
+.booking-history td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 14px;
+}
+
+.booking-history th {
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+}
+
+.booking-history td {
+    background-color: #fafafa;
+}
+
+.booking-history tr:nth-child(even) td {
+    background-color: #f4f4f4;
+}
+
+.booking-history tr:hover td {
+    background-color: #f0f0f0;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.action-buttons button {
+    padding: 12px 25px;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.action-buttons button[onclick*="updateTicketStatus('PAID')"] {
+    background-color: #4CAF50;
+}
+
+.action-buttons button[onclick*="updateTicketStatus('PAID')"]:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.action-buttons button[onclick*="updateTicketStatus('DECLINED')"] {
+    background-color: #f34d4d;
+}
+
+.action-buttons button[onclick*="updateTicketStatus('DECLINED')"]:hover {
+    background-color: #d43b3b;
+    transform: translateY(-2px);
+}
+
+.action-buttons button[onclick*="removeSelectedTickets()"] {
+    background-color: #ffa500;
+}
+
+.action-buttons button[onclick*="removeSelectedTickets()"]:hover {
+    background-color: #ff8c00;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #000000;
+    color: white;
+    margin-top: 30px;
+}
+
+/* Rides Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    overflow-y: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Ride Cards */
+.rides-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.ride-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.ride-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .rides-container {
+        gap: 10px;
+    }
+
+    .ride-card {
+        width: 45%;
+    }
+}
+
+@media (max-width: 480px) {
+    .rides-container {
+        flex-direction: column;
+    }
+
+    .ride-card {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 95%;
+    }
+}
+/* Style for the Remove button */
+button.remove {
+    background-color: gold;
+    color: rgb(255, 255, 255);
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button.remove:hover {
+    background-color: rgb(215, 183, 0);
+    transform: scale(1.05);
+}
+
+/* Style for the Generate Report button */
+button.report-btn {
+    background-color: black;
+    color: white;
+    border: 1px solid #333;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button.report-btn:hover {
+    background-color: #444;
+    transform: scale(1.05);
+}

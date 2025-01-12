@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etivac Thrillz</title>
+    <link rel="stylesheet" href="{% static 'css/custacc.css' %}"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <img src="{% static 'media/logo.png' %}" alt="Etivac Thrillz Logo">
+        <nav>
+            <a href="/costumer_main/">Home</a>
+            <a href="/cost_Rides/">Rides and Attractions</a>
+            <a href="/buy_ticket/">Buy Ticket</a>
+            <a href="/cost_account/">My Account</a>
+        </nav>
+    </header>
+<body>
+
+<center>
+    <!-- Logout Button -->
+    <div>
+        <a href="{% url 'logout' %}">Log Out</a>
+    </div>
+
+    <!-- Profile Information Section -->
+    <h2>Profile Information</h2>
+    <div>
+        {% if is_gmail %}
+            <p><b>Name:</b> {{ username }}</p>
+            <p><b>Email:</b> {{ email }}</p>
+            <button id="changePasswordBtn">Change Password</button>
+        {% else %}
+            <p>You must log in with a Gmail account to view your profile information.</p>
+        {% endif %}
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <h3>Change Password</h3>
+            <form method="post" action="{% url 'cost_acc' %}">
+                {% csrf_token %}
+                <div>
+                    <label for="current_password">Current Password:</label>
+                    <input type="password" id="current_password" name="current_password" required>
+                </div>
+                <div>
+                    <label for="new_password">New Password:</label>
+                    <input type="password" id="new_password" name="new_password" required>
+                </div>
+                <div>
+                    <label for="confirm_password">Confirm New Password:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+                <div>
+                    <button type="submit">Change</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Booking History Section -->
+    <h2>Booking History</h2>
+    <div>
+        <table border="1" cellpadding="10" cellspacing="0">
+            <tr>
+                <th>Customer Name</th>
+                <th>Customer Email</th>
+                <th>Unlimited Quantity</th>
+                <th>Limited Quantity</th>
+                <th>Gcash Reference Number</th>
+                <th>Total Price</th>
+                <th>Booking Date</th>
+            </tr>
+            {% for reservation in ticket_reservations %}
+            <tr>
+                <td>{{ reservation.customer_name }}</td>
+                <td>{{ reservation.customer_email }}</td>
+                <td>{{ reservation.unlimited_quantity }}</td>
+                <td>{{ reservation.limited_quantity }}</td>
+                <td>{{ reservation.receipt_of_payment }}</td>
+                <td>{{ reservation.total_price }}</td>
+                <td>{{ reservation.date_of_purchase }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">No bookings found.</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</center>
+
+<script>
+    // Modal functionality
+    var modal = document.getElementById("changePasswordModal");
+    var btn = document.getElementById("changePasswordBtn");
+
+    // When the user clicks the "Change Password" button, toggle the modal visibility
+    btn.onclick = function() {
+        if (modal.style.display === "none" || modal.style.display === "") {
+            modal.style.display = "block";  // Show the modal
+        } else {
+            modal.style.display = "none";  // Hide the modal
+        }
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>

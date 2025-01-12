@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/signin.css' %}">
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .server-error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .forgot-password {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .forgot-password a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <!-- Server-side Error Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="server-error">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form id="login-form" method="POST" action="{% url 'signin' %}">
+            {% csrf_token %}
+            <h2 class="form-title">Login</h2>
+
+            <!-- Email Field -->
+            <div class="input-group">
+                <input id="email" name="email" type="email" placeholder=" " required aria-label="Email">
+                <label for="email" class="floating-label">Email</label>
+                <span id="email-error" class="error-message" aria-live="polite"></span>
+            </div>
+
+            <!-- Password Field -->
+            <div class="input-group">
+                <input id="password" name="password" type="password" placeholder=" " required aria-label="Password">
+                <label for="password" class="floating-label">Password</label>
+                <span id="password-error" class="error-message" aria-live="polite"></span>
+            </div>
+
+            <!-- Remember Me Checkbox -->
+
+
+            <!-- Login Button -->
+            <div class="button-container">
+                <button type="submit" class="login-button">Login</button>
+            </div>
+
+            <!-- Forgot Password Link -->
+            <div class="forgot-password">
+                <a href="/forgot-password/" id="forgot-password-link">Forgot Password?</a>
+            </div>
+
+            <p class="signup-link">Don’t have an account yet? <a href="/signup/">Sign up here!</a></p>
+        </form>
+    </div>
+
+    <script>
+        // Login form validation
+        document.getElementById("login-form").onsubmit = function (event) {
+            // Get input values
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            let isValid = true;
+
+            // Clear previous error messages
+            document.getElementById("email-error").innerText = "";
+            document.getElementById("password-error").innerText = "";
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email.match(emailRegex)) {
+                document.getElementById("email-error").innerText = "Please enter a valid email address.";
+                isValid = false;
+            }
+
+            // Password validation
+            if (password.length < 6) {
+                document.getElementById("password-error").innerText = "Password must be at least 6 characters.";
+                isValid = false;
+            }
+
+            // If invalid, prevent form submission
+            if (!isValid) {
+                event.preventDefault();
+            }
+        };
+
+        // Forgot password alert (optional)
+        document.getElementById("forgot-password-link").addEventListener("click", function (event) {
+            alert("Redirecting to the Forgot Password page.");
+        });
+    </script>
+</body>
+</html>

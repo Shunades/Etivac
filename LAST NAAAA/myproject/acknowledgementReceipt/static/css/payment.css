@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#payment-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: left; /* Align content to the left for better readability */
+}
+
+h1 {
+    color: #333;
+    font-size: 26px; /* Increase font size for the title */
+    font-weight: bold; /* Make it stand out */
+    margin-bottom: 15px;
+    text-align: center; /* Keep the title centered */
+}
+
+p {
+    font-size: 18px; /* Increase font size for regular text */
+    color: #555;
+    margin: 10px 0;
+    line-height: 1.8; /* Improve readability with increased line height */
+    text-align: center; /* Align text to center for a balanced look */
+}
+
+p strong {
+    font-size: 20px; /* Make important details, like GCash number, slightly larger */
+    color: #000; /* Emphasize with darker color */
+    display: block; /* Ensure these appear on separate lines for better readability */
+    margin: 10px 0; /* Add spacing above and below */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start; /* Align form elements to the left */
+}
+
+label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+input[type="number"], input[type="file"] {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't affect element width */
+}
+
+input[type="file"] {
+    padding: 5px;
+}
+
+button {
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Make the button full width for consistent alignment */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.instructions {
+    font-size: 12px;
+    color: #888;
+    text-align: left; /* Align instructions to the left */
+    margin-top: -10px; /* Reduce unnecessary spacing */
+}

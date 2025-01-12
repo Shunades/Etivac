@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etivac Thrillz</title>
+    <link rel="stylesheet" href="{% static 'css/mainpage.css' %}"> <!-- Link to the CSS file -->
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <img src="{% static 'media/logo.png' %}" alt="Etivac Thrillz Logo">
+        <nav>
+            <a href="/costumer_main/">Home</a>
+            <a href="/cost_Rides/">Rides and Attractions</a>
+            <a href="/buy_ticket/">Buy Ticket</a>
+            <a href="/cost_account/">My Account</a>
+        </nav>
+    </header>
+
+
+    <!-- Hero Section -->
+    <div class="hero-section"></div>
+
+    <!-- Hero Text Below -->
+    <div class="hero-text" style="text-align: center; margin: 20px;">
+        Enjoy non-stop thrills and unforgettable fun at Etivac Thrillz!
+    </div>
+
+    <!-- Video Section -->
+    <div class="video-section">
+        <h2>Watch Our Promotional Video</h2>
+        <iframe src="https://www.youtube.com/embed/bGTCSyM2Zro?autoplay=1&mute=0" allowfullscreen></iframe>
+    </div>
+
+    <!-- Tickets Section -->
+    <div class="tickets-section">
+        <h2>Reserve Ticket Now!</h2>
+        <div class="ticket-cards">
+            <!-- Ticket Card 1 -->
+            <div class="ticket-card">
+                <a href="/buy_ticket/" class="book-now">
+                    <img src="{% static 'media/carousel.jpg' %}" alt="Carousel Ticket">
+                    Book Now!
+                </a>
+                <h3 style="color: black;">Carousel</h3>
+                <p style="color: black;">A classic and enchanting ride featuring beautifully crafted horses, perfect for all ages.</p>
+            </div>
+            <!-- Ticket Card 2 -->
+            <div class="ticket-card">
+                <a href="/buy_ticket/" class="book-now">
+                    <img src="{% static 'media/ferriswheel.jpg' %}" alt="Ferris Wheel Ticket">
+                    Book Now!
+                </a>
+                <h3 style="color: black;">Ferris Wheel</h3>
+                <p style="color: black;">A towering Ferris wheel offering breathtaking views from high above.</p>
+            </div>
+            <!-- Ticket Card 3 -->
+            <div class="ticket-card">
+                <a href="/buy_ticket/" class="book-now">
+                    <img src="{% static 'media/starfrisbee.png' %}" alt="Star Frisbee Ticket">
+                    Book Now!
+                </a>
+                <h3 style="color: black;">Star Frisbee</h3>
+                <p style="color: black;">An exhilarating ride that spins and flips with incredible views!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="glitter-container"></div> <!-- Container for glitter effects -->
+
+    <!-- FAQs Section within the main content -->
+    <div class="faqs-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq">
+            <h3>What are the park hours?</h3>
+            <p>The park is open from 9:00 AM to 9:00 PM every day.</p>
+        </div>
+        <div class="faq">
+            <h3>Are there any age restrictions for rides?</h3>
+            <p>Some rides have age or height restrictions for safety. Please check each ride’s details on our Rides and Attractions page.</p>
+        </div>
+        <div class="faq">
+            <h3>Can I buy tickets online?</h3>
+            <p>Yes, tickets can be purchased online. Visit our Tickets section to reserve yours now!</p>
+        </div>
+        <div class="faq">
+            <h3>What are the COVID-19 safety protocols?</h3>
+            <p>We have implemented enhanced cleaning and social distancing measures throughout the park.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Etivac Thrillz. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.querySelectorAll('.faq h3').forEach(item => {
+            item.addEventListener('click', () => {
+                item.parentElement.classList.toggle('active');
+            });
+        });
+
+        const glitterContainer = document.getElementById('glitter-container');
+
+        document.addEventListener('mousemove', (e) => {
+            createGlitterEffect(e.pageX, e.pageY);
+        });
+
+        function createGlitterEffect(x, y) {
+            const glitter = document.createElement('div');
+            glitter.classList.add('glitter');
+            glitter.style.left = `${x}px`;
+            glitter.style.top = `${y}px`;
+            glitterContainer.appendChild(glitter);
+
+            setTimeout(() => {
+                glitter.remove(); // Remove glitter after animation
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

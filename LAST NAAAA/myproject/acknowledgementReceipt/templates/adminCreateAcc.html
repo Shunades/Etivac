@@ -1,0 +1,111 @@
+{% extends "adminBookingHistory.html" %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/admincreateAcc.css' %}">
+
+    <div class="container">
+        <h2>Create Account for Gate Admin</h2>
+    
+        <!-- Display Success/Error Messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    
+        <!-- Account Creation Form -->
+        <form action="{% url 'eaadmin_create' %}" method="POST" onsubmit="return validateForm()">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Enter First Name" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Enter Last Name" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="username">Email</label>
+                <div class="email-wrapper">
+                    <input type="text" id="username" placeholder="Username" required>
+                    <span>@etivacthrillz.gateadmin.com</span>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="password">Create Password</label>
+                <input type="password" id="password" name="password" placeholder="Create Password" oninput="removeSpaces(this)" required>
+                <small id="passwordError" class="error-message"></small>
+            </div>
+    
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" oninput="removeSpaces(this)" required>
+                <small id="confirmPasswordError" class="error-message"></small>
+            </div>
+    
+            <button type="submit" class="btn-submit">Create Account</button>
+        </form>
+    </div>
+    
+
+    <script>
+        function validateForm() {
+            const usernameInput = document.getElementById('username');
+            const username = usernameInput.value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+    
+            const passwordError = document.getElementById('passwordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+    
+            // Password Validation Criteria
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    
+            // Reset error messages
+            passwordError.textContent = '';
+            confirmPasswordError.textContent = '';
+    
+            if (!passwordRegex.test(password)) {
+                passwordError.textContent =
+                    'Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one number, and one special character.';
+                return false;
+            }
+    
+            if (password !== confirmPassword) {
+                confirmPasswordError.textContent = 'Passwords do not match!';
+                return false;
+            }
+    
+            if (password.includes(' ')) {
+                passwordError.textContent = 'Passwords cannot contain spaces!';
+                return false;
+            }
+    
+            // Construct email
+            const email = username + '@etivacthrillz.gateadmin.com';
+            const emailInput = document.createElement('input');
+            emailInput.type = 'hidden';
+            emailInput.name = 'email';
+            emailInput.value = email;
+    
+            const form = document.querySelector('form');
+            form.appendChild(emailInput);
+    
+            return true; // Allow form submission
+        }
+    
+        function removeSpaces(input) {
+            input.value = input.value.replace(/\s+/g, '');
+        }
+    </script>
+    
+{% endblock %}

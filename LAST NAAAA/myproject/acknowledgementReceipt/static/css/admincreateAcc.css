@@ -1,0 +1,117 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa; /* Subtle light background */
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Container Styling */
+.container {
+    width: 90%;
+    max-width: 450px; /* Reduced max-width for a more compact form */
+    margin: 20px auto;
+    padding: 15px; /* Reduced padding for compactness */
+    background: #ffffff;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Heading */
+h2 {
+    font-size: 20px; /* Compact font size */
+    margin-bottom: 15px;
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 10px; /* Reduced spacing between inputs */
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px; /* Smaller font size for labels */
+    margin-bottom: 5px; /* Compact spacing for labels */
+    color: #555;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px; /* Reduced padding for inputs */
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Subtle rounded corners */
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+/* Email Wrapper */
+.email-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Compact spacing between username input and domain */
+}
+
+.email-wrapper input[type="text"] {
+    flex: 1;
+}
+
+.email-wrapper span {
+    padding: 6px 10px; /* Compact padding for domain */
+    background: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 12px; /* Smaller domain font size */
+    color: #666;
+}
+
+/* Button */
+.btn-submit {
+    width: 100%;
+    padding: 10px; /* Reduced padding */
+    background: #007bff; /* Subtle blue color */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 10px; /* Reduced padding for smaller screens */
+    }
+
+    h2 {
+        font-size: 18px; /* Smaller heading for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .email-wrapper span {
+        font-size: 11px; /* Compact domain text */
+        padding: 4px 8px;
+    }
+}
+
+/* Error Message Styling */
+.error-message {
+    font-size: 12px;
+    color: red;
+    margin-top: 5px;
+    display: block;
+}

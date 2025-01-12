@@ -1,0 +1,265 @@
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+    box-sizing: border-box; /* Ensure padding and borders don't affect width */
+}
+
+/* Universal Box Sizing */
+* {
+    box-sizing: border-box;
+}
+
+/* Centered Content */
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Add Ride Button Styling */
+.add-ride-btn {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.add-ride-btn:hover {
+    background-color: #218838;
+}
+
+/* Modal Styling */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000; /* Ensure it's on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Dark transparent background */
+    overflow-y: auto; /* Allow scrolling on small screens */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal Content Styling */
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between elements */
+}
+
+/* Close Button Styling */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* Form Input Styling */
+.modal-content input[type="text"],
+.modal-content input[type="file"],
+.modal-content textarea,
+.modal-content select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px; /* Spacing between fields */
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Label Styling */
+.modal-content label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Add Ride Button inside Modal */
+.modal-content button {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.modal-content button:hover {
+    background-color: #218838;
+}
+
+/* Sort By Dropdown Styling */
+.sort-by-container {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.sort-by-container label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#sort-rides {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+#sort-rides:hover {
+    background-color: #f0f0f0;
+}
+
+/* Ride Container Styles */
+.rides-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Adds space between cards */
+    margin-top: 20px;
+}
+
+/* Ride Card Styling */
+.ride-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    max-width: 300px; /* Fixed card size */
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+/* Ride Card Image */
+.ride-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 10px 10px 0 0;
+}
+
+/* Text inside Ride Card */
+.ride-details {
+    padding: 10px 15px;
+}
+
+/* Ride Name Styling with Multi-Line Truncation */
+.ride-name {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+    margin: 10px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 3.2em; /* Limit to 2 lines (1.6em per line) */
+    line-height: 1.6em;
+    display: block;
+    white-space: normal;
+}
+
+/* Ride Info and Category Styling */
+.ride-info,
+.ride-category {
+    font-size: 15px;
+    color: #777;
+    margin-top: 10px;
+}
+
+/* Ride Actions (e.g., buttons) */
+.ride-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ride-actions button {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+.ride-actions button:hover {
+    background-color: #45a049;
+}
+
+.ride-actions button:last-child {
+    background-color: #f34d4d;
+}
+
+.ride-actions button:last-child:hover {
+    background-color: #d43b3b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .ride-card {
+        width: 45%;
+    }
+
+    .modal-content {
+        width: 95%; /* Make modal full-width */
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ride-card {
+        width: 100%; /* Full-width for small devices */
+    }
+}

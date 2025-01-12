@@ -1,0 +1,429 @@
+/* General body styling */
+body { 
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header styling */
+header {
+    position: relative;
+    z-index: 2;
+    background-color: transparent;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header img {
+    width: 150px;
+    height: auto;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+}
+
+/* Navigation bar with button styling */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-left: 150px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 25px;
+    background-color: #a0bacc; /* Grayish light blue for button */
+    border: none;
+    border-radius: 8px; /* Rounded corners for button effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for button */
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+nav a:hover {
+    background-color: #90a9bd; /* Slightly darker grayish light blue on hover */
+    transform: translateY(-2px); /* Subtle lift effect on hover */
+}
+
+
+/* Additional styles for responsiveness */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    header img {
+        margin-bottom: 10px;
+    }
+
+}
+
+/* Additional sections styling (like Hero Section, Video Section, Ticket Section, FAQs, etc.) */
+.hero-section {
+    background-image: url("/static/media/hay.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 550px;
+}
+
+
+/* Form Section Styling */
+form#customer-ticket-form {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Labels and Fields */
+form#customer-ticket-form div {
+    margin-bottom: 15px;
+}
+
+label.customer-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input[type="text"].customer-input,
+input[type="email"].customer-input,
+input[type="date"].customer-input,
+input[type="number"].customer-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Buttons Styling */
+button.customer-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #45a049; /* Primary blue color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-top: 10px;
+}
+
+button.customer-button:hover {
+    background-color: #5bcd60; /* Darker blue on hover */
+    transform: translateY(-2px);
+}
+
+button.customer-button:active {
+    transform: scale(0.98);
+}
+
+/* Table Styling */
+table.customer-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th.customer-table-header, td.customer-table-data {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th.customer-table-header {
+    background-color: #000000;
+    color: #fff;
+    font-weight: bold;
+}
+
+td.customer-table-data {
+    background-color: #f9f9f9;
+}
+
+tr:nth-child(even) td.customer-table-data {
+    background-color: #f1f1f1;
+}
+
+/* Section Title Styling */
+h2.customer-section-title {
+    font-size: 24px;
+    color: #000000;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+h3.customer-total-title {
+    font-size: 20px;
+    color: #333;
+    text-align: center;
+}
+
+/* Total Price Display */
+#customer-grand-total {
+    font-weight: bold;
+    color: #28a745;
+}
+
+/* Section Container Styling */
+#customer-day-pass-section,
+#customer-limited-pass-section {
+    display: none;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    form#customer-ticket-form {
+        width: 90%;
+        padding: 15px;
+    }
+}
+
+/* General Body Style */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header Styling */
+header {
+    position: relative;
+    z-index: 2;
+    background-color: #333;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header img {
+    width: 150px;
+    height: auto;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+nav a {
+    text-decoration: none;
+    background-color: #696969;
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 15px;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+/* Container for Main Content */
+.container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Header Title */
+.container h2 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Search and Filter Section */
+.search-filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.search-filters input[type="text"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 200px;
+    font-size: 14px;
+}
+
+.search-filters button,
+.search-filters select {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background-color: #f8f8f8;
+    transition: background-color 0.3s;
+}
+
+.search-filters button:hover,
+.search-filters select:hover {
+    background-color: #e0e0e0;
+}
+
+/* Booking History Table */
+.booking-history {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.booking-history th,
+.booking-history td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 14px;
+}
+
+.booking-history th {
+    background-color: #333;
+    color: #fff;
+    font-weight: bold;
+}
+
+.booking-history td {
+    background-color: #fafafa;
+}
+
+.booking-history tr:nth-child(even) td {
+    background-color: #f4f4f4;
+}
+
+.booking-history tr:hover td {
+    background-color: #f0f0f0;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.action-buttons button {
+    padding: 12px 25px;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* PAID Button Styling */
+.action-buttons button[onclick*="updateTicketStatus('PAID')"] {
+    background-color: #4CAF50; /* Green */
+}
+
+.action-buttons button[onclick*="updateTicketStatus('PAID')"]:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+/* DECLINE Button Styling */
+.action-buttons button[onclick*="updateTicketStatus('DECLINE')"] {
+    background-color: #f34d4d; /* Red */
+}
+
+.action-buttons button[onclick*="updateTicketStatus('DECLINE')"]:hover {
+    background-color: #d43b3b;
+    transform: translateY(-2px);
+}
+
+/* REMOVE Button Styling */
+.action-buttons button[onclick*="removeSelectedTickets()"] {
+    background-color: #ffa500; /* Orange */
+}
+
+.action-buttons button[onclick*="removeSelectedTickets()"]:hover {
+    background-color: #ff8c00;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #000000;
+    color: white;
+    margin-top: 30px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-filters {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .booking-history th,
+    .booking-history td {
+        padding: 10px;
+    }
+}
+
+.customer-note {
+    font-size: 1em; /* Increase the font size slightly */
+    color: #333; /* Make the text a bit darker */
+    background-color: #fffae6; /* Add a light yellow background */
+    border: 1px solid #ffc107; /* Add a gold border */
+    padding: 10px; /* Add some padding for better readability */
+    border-radius: 5px; /* Slightly round the corners */
+    margin-top: 15px; /* Add some spacing above the note */
+    font-weight: bold; /* Make the text bold */
+    text-align: center; /* Center-align the text */
+}
+

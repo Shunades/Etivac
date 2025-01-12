@@ -1,0 +1,230 @@
+{% extends 'adminBookingHistory.html' %}
+
+{% block title %}Rides and Attractions{% endblock %}
+
+{% block content %}
+    <!-- Load static files for CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/adminRides.css' %}">
+
+    <script>
+        // Function to remove a ride
+        function removeRide(id) {
+            const rideElement = document.getElementById(id);
+            if (confirm("Are you sure you want to remove this ride? It will be archived.")) {
+                const formData = new FormData();
+                formData.append('archive_ride_id', id.replace('ride', ''));
+
+                fetch('/eaadmin/rides/', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Ride successfully archived and removed.');
+                        location.reload();
+                    } else {
+                        throw new Error('Failed to archive and remove ride.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to archive and remove ride.');
+                });
+            }
+        }
+
+        // Function to edit a ride
+        function editRide(id) {
+            const rideElement = document.getElementById(id);
+            const nameElement = rideElement.querySelector(".ride-name");
+            const imgElement = rideElement.querySelector("img");
+            const infoElement = rideElement.querySelector(".ride-info");
+            const categoryElement = rideElement.querySelector(".ride-category");
+
+            const newName = prompt("Enter new ride name (leave blank to keep current):", nameElement.textContent);
+            const newImageUrl = prompt("Enter new image URL (leave blank to keep current):", imgElement.src);
+            const newRideInfo = prompt("Enter new ride information (leave blank to keep current):", infoElement.textContent);
+            const newCategory = prompt("Enter new ride type (e.g., Kiddie, Attractions, Extreme):", categoryElement.textContent);
+
+            const formData = new FormData();
+            formData.append('ride_id', id.replace('ride', ''));
+
+            if (newName !== null && newName !== "") {
+                formData.append('description', newName);
+            }
+            if (newImageUrl !== null && newImageUrl !== "") {
+                formData.append('image', newImageUrl);
+            }
+            if (newRideInfo !== null && newRideInfo !== "") {
+                formData.append('info', newRideInfo);
+            }
+            if (newCategory !== null && newCategory !== "") {
+                formData.append('category', newCategory);
+            }
+
+            fetch('/eaadmin/rides/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Ride updated successfully!');
+                    location.reload();
+                } else {
+                    throw new Error('Failed to update ride.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update ride.');
+            });
+        }
+
+        // Function to open the modal for adding a new ride
+        function addRide() {
+            document.getElementById('addRideModal').style.display = 'block';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('addRideModal').style.display = 'none';
+        }
+
+        // Function to submit the new ride
+        function submitNewRide() {
+            const form = document.getElementById('formAddRide');
+            const formData = new FormData(form);
+
+            fetch('/eaadmin/rides/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Ride added successfully!');
+
+                    // Dynamically add the new ride to the DOM
+                    const rideContainer = document.querySelector('.rides-container');
+                    const newRide = document.createElement('div');
+                    newRide.classList.add('ride-card');
+                    newRide.setAttribute('data-category', data.category);
+
+                    newRide.innerHTML = `
+                        <img src="${data.image_url}" alt="${data.description}">
+                        <div class="ride-details">
+                            <h3 class="ride-name">${data.description}</h3>
+                            <div class="ride-info">${data.info}</div>
+                            <div class="ride-category"><strong>Type:</strong> ${data.category}</div>
+                            <div class="ride-actions">
+                                <button onclick="editRide('ride${data.id}')">Edit</button>
+                                <button onclick="removeRide('ride${data.id}')">-</button>
+                            </div>
+                        </div>
+                    `;
+
+                    // Append the new ride card to the container
+                    rideContainer.appendChild(newRide);
+
+                    // Clear the form fields
+                    form.reset();
+
+                    closeModal(); // Close the modal after adding the ride
+                } else {
+                    alert('Failed to add ride: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to add ride.');
+            });
+        }
+
+        // Function to filter rides based on category
+        function filterRides(category) {
+            const allRides = document.querySelectorAll('.ride-card');
+            allRides.forEach(ride => {
+                const rideCategory = ride.getAttribute('data-category');
+                if (category === 'all' || rideCategory === category) {
+                    ride.style.display = '';
+                } else {
+                    ride.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+    <div align="center">
+        <h2>Rides and Attractions</h2>
+
+        <!-- Add Ride Button -->
+        <button class="add-ride-btn" onclick="addRide()">Add Rides and Attractions</button>
+
+        <!-- Modal for Adding Ride -->
+        <div id="addRideModal" class="modal">
+            <div class="modal-content">
+                <!-- Close Button (X) -->
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h3>Add New Ride or Attraction</h3>
+                <form method="POST" enctype="multipart/form-data" id="formAddRide">
+                    {% csrf_token %}
+                    <input type="text" id="rideDescription" name="description" placeholder="Ride Title" required>
+                    <input type="file" id="rideImage" name="image" accept="image/*" required>
+                    <textarea name="info" placeholder="Ride Information" required></textarea>
+
+                    <!-- Ride Category Dropdown -->
+                    <label for="rideCategory">Select Ride Type:</label>
+                    <select id="rideCategory" name="category" required>
+                        <option value="attractions">Attractions</option>
+                        <option value="kiddie">Kiddie Rides</option>
+                        <option value="family">Family Rides</option>
+                        <option value="extreme">Extreme Rides</option>
+                    </select>
+                    
+                    <button type="button" onclick="submitNewRide()">Add Ride</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sort By Section -->
+        <div class="sort-by-container">
+            <label for="sort-rides">Sort By:</label>
+            <select id="sort-rides" onchange="filterRides(this.value)">
+                <option value="all">All Rides</option>
+                <option value="attractions">Attractions</option>
+                <option value="kiddie">Kiddie Rides</option>
+                <option value="family">Family Rides</option>
+                <option value="extreme">Extreme Rides</option>
+            </select>
+        </div>
+
+        <!-- Rides Grid -->
+        <div class="rides-container">
+            {% for attraction in attractions %}
+            <div class="ride-card" id="ride{{ attraction.id }}" data-category="{{ attraction.category }}">
+                <img src="{{ attraction.image.url }}" alt="{{ attraction.description }}">
+                <div class="ride-details">
+                    <!-- Display only the first 100 characters of the description -->
+                    <h3 class="ride-name">{{ attraction.description|slice:":100" }}</h3>
+                    <div class="ride-info">{{ attraction.information }}</div>
+                    <div class="ride-category"><strong>Type:</strong> {{ attraction.category }}</div>
+                    <div class="ride-actions">
+                        <button onclick="editRide('ride{{ attraction.id }}')">Edit</button>
+                        <button onclick="removeRide('ride{{ attraction.id }}')">-</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

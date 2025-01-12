@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <link rel="stylesheet" href="{% static 'css/invoice.css' %}">
+    <style>
+        .total-cost {
+            font-size: 1.5em; /* Increase font size */
+            font-weight: bold; /* Make it bold */
+            color: #333; /* Optional: Add color to highlight */
+            text-align: center; /* Center-align the text */
+            margin-top: 20px; /* Add some space above */
+        }
+    </style>
+    <script>
+        function proceedToPayment() {
+            const button = document.querySelector('button[onclick="proceedToPayment()"]');
+            button.disabled = true; // Disable the button to prevent multiple clicks
+            button.textContent = "Processing..."; // Update the button text
+            try {
+                window.location.href = '{% url "payment" %}';
+            } catch (error) {
+                button.disabled = false; // Re-enable the button if navigation fails
+                button.textContent = "Proceed to Payment"; // Reset the button text
+                alert("Unable to proceed to payment. Please try again later.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="receipt">
+        <header>
+            <h1>Receipt</h1>
+        </header>
+
+        <section>
+            <h2>Customer Information</h2>
+            <p><strong>Name:</strong> {{ customer_name }}</p>
+            <p><strong>Email:</strong> {{ customer_email }}</p>
+        </section>
+
+        <section>
+            <h2>Selected Date</h2>
+            <p><strong>Date:</strong> {{ ticket_date }}</p>
+        </section>
+
+        <section>
+            <h2>Ticket Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket Type</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket, details in availed_tickets.items %}
+                    <tr>
+                        <td>{{ ticket|capfirst }}</td>
+                        <td>{{ details.quantity }}</td>
+                        <td>₱{{ details.price }}</td>
+                        <td>₱{{ details.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Total Cost</h2>
+            <p class="total-cost">₱{{ total_cost }}</p>
+        </section>
+
+        <div>
+            <button onclick="window.history.back()" aria-label="Go back">Back</button>
+            <button onclick="proceedToPayment()" aria-label="Proceed to payment">Proceed to Payment</button>
+        </div>
+    </div>
+</body>
+</html>

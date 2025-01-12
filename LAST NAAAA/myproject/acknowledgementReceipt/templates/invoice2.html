@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <link rel="stylesheet" href="{% static 'css/invoice.css' %}">
+    <style>
+        .total-cost {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button[aria-label="Go back"] {
+            background-color: #6c757d;
+        }
+
+        button[aria-label="Go back"]:hover {
+            background-color: #5a6268;
+        }
+
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .modal button {
+            margin: 10px 5px;
+        }
+    </style>
+    <script>
+        function showPaymentModal() {
+            document.getElementById("paymentModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("paymentModal").style.display = "none";
+        }
+
+        function proceedBasedOnPayment() {
+            const selectedMode = document.querySelector('input[name="paymentMode"]:checked');
+            if (selectedMode) {
+                if (selectedMode.value === "gcash") {
+                    window.location.href = "{% url 'GateAdminPayment' %}"; // Updated to align with the first path
+                } else if (selectedMode.value === "cash") {
+                    window.location.href = "{% url 'gateadmin_bh' %}"; // Keep your cash URL as is
+                }
+            } else {
+                alert("Please select a payment mode before proceeding.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="receipt">
+        <header>
+            <h1>Invoice</h1>
+        </header>
+
+        <section>
+            <h2>Customer Information</h2>
+            <p><strong>Name:</strong> {{ customer_name }}</p>
+            <p><strong>Email:</strong> {{ customer_email }}</p>
+        </section>
+
+        <section>
+            <h2>Selected Date</h2>
+            <p><strong>Date Availed:</strong> {{ ticket_date }}</p>
+        </section>
+
+        <section>
+            <h2>Ticket Details</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ticket Type</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket, details in availed_tickets.items %}
+                    <tr>
+                        <td>{{ ticket|capfirst }}</td>
+                        <td>{{ details.quantity }}</td>
+                        <td>₱{{ details.price }}</td>
+                        <td>₱{{ details.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2>Total Cost</h2>
+            <p class="total-cost">₱{{ total_cost }}</p>
+        </section>
+
+        <div>
+            <button onclick="window.history.back()" aria-label="Go back">Back</button>
+            <button onclick="showPaymentModal()" aria-label="Proceed to payment">Proceed to Payment</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <h3>Select Payment Mode</h3>
+            <label>
+                <input type="radio" name="paymentMode" value="gcash"> GCash
+            </label>
+            <label>
+                <input type="radio" name="paymentMode" value="cash"> Cash
+            </label>
+            <br><br>
+            <button onclick="proceedBasedOnPayment()">Proceed</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</body>
+</html>

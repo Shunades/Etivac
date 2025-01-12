@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etivac Thrillz - FAQs</title>
+    <link rel="stylesheet" href="{% static 'css/faqs.css' %}">
+    <script>
+        // Simple script to toggle the display of answers
+        document.addEventListener('DOMContentLoaded', () => {
+            const questions = document.querySelectorAll('.faq h3');
+            questions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <header>
+        <img src="{% static 'media/logo.png' %}" alt="Etivac Thrillz Logo">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/ridesAttraction/">Rides and Attractions</a>
+            <a href="/faqs/">FAQs</a>
+        </nav>
+        <a href="/signin/" class="sign-in">Sign In</a>
+    </header>
+
+    <!-- FAQs Section -->
+    <div class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq">
+            <h3>What are the park hours?</h3>
+            <p>The park is open from 9 AM to 10 PM daily.</p>
+        </div>
+        <div class="faq">
+            <h3>What is the ticket price?</h3>
+            <p>General admission is $50 for adults and $30 for children under 12.</p>
+        </div>
+        <div class="faq">
+            <h3>Are there any height restrictions for rides?</h3>
+            <p>Yes, guests must be at least 48 inches tall to ride most attractions.</p>
+        </div>
+        <div class="faq">
+            <h3>Can I bring outside food and drinks?</h3>
+            <p>No, outside food and beverages are not allowed in the park.</p>
+        </div>
+        <div class="faq">
+            <h3>Is parking available?</h3>
+            <p>Yes, there is ample parking available for a fee of $10 per vehicle.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 Etivac Thrillz. All rights reserved.
+    </footer>
+
+</body>
+</html>

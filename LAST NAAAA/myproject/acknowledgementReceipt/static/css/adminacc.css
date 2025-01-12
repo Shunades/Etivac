@@ -1,0 +1,129 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header */
+header {
+    position: relative;
+    z-index: 2;
+    background-color: transparent;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header img {
+    width: 150px;
+    height: auto;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    margin-left: 150px;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 15px;
+    position: relative;
+    transition: color 0.3s, transform 0.3s;
+}
+
+nav a:not(:last-child)::after {
+    content: '';
+    width: 2px;
+    height: 20px;
+    background-color: #ccc;
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+nav a:hover {
+    color: #f34d4d;
+    transform: scale(1.05);
+}
+
+.sign-in {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.sign-in:hover {
+    background-color: #45a049;
+    transform: translateY(-3px);
+}
+
+/* Main Container */
+.container {
+    width: 60%;
+    max-width: 800px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 20px auto;
+}
+
+/* Account Header */
+.container h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Account Overview Section */
+.account-overview {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.account-overview h3 {
+    font-size: 22px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.account-overview p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.account-overview b {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    margin-top: 30px;
+}
